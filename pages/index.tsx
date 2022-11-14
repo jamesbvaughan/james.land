@@ -26,11 +26,11 @@ const BigText = ({
 const Home: NextPage = () => {
   return (
     <div className="absolute inset-0">
-      <Canvas>
+      <Canvas frameloop="demand">
         <color attach="background" args={["black"]} />
 
         <ambientLight />
-        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[-5, 10, 20]} />
 
         <Center position={[0, 1, 0]}>
           <BigText size={0.4}>welcome to</BigText>
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
             bokehScale={2}
             height={480}
           />
-          <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
+          <Bloom luminanceThreshold={0} luminanceSmoothing={0.2} height={500} />
           <Noise opacity={0.02} />
           <Vignette eskil={false} offset={0.1} darkness={1.1} />
         </EffectComposer>
