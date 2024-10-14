@@ -10,3 +10,7 @@ body {
   width: 720px;
   max-width: 90vw;
 }
+
+a {
+  color: blue;
+}
