@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  purgeCache:
+  purge_cache:
     runs-on: ubuntu-latest
     steps:
       - name: Purge Cloudflare cache
