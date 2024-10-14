@@ -1,6 +1,8 @@
 body {
+  /* Only named colors! */
+  background-color: dimgray;
+  color: lavenderblush;
   margin: 0;
-  background-color: ghostwhite;
   font-family: Helvetica, Arial, sans-serif;
   display: flex;
   justify-content: center;
@@ -11,6 +13,17 @@ body {
   max-width: 90vw;
 }
 
-a {
-  color: blue;
+a:hover {
+  text-underline-offset: 4px;
+}
+
+a,
+a:active {
+  color: aliceblue;
+  text-underline-offset: 3px;
+}
+
+::selection {
+  background-color: lavenderblush;
+  color: dimgray;
 }
