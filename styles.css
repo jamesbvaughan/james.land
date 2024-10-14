@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  background-color: ghostwhite;
+  font-family: Helvetica, Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 720px;
+  max-width: 90vw;
+}

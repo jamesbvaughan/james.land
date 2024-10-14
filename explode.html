@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>exploding selection | james.land</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer type="text/javascript" src="exploding-selection.js"></script>
+
+    <style>
+      .explode {
+        position: relative;
+      }
+
+      .explodable {
+        transform: translate(var(--x), var(--y)) rotate(var(--angle));
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <a href="/">
+          <h1>james.land</h1>
+        </a>
+      </header>
+
+      <main>
+        <h2 class="explode">exploding selection</h2>
+
+        <p class="explode">
+          For this experiment, I wanted to see if browsers retain your text
+          selection if the selected text breaks apart spatially.
+        </p>
+
+        <p class="explode">
+          It turns out that they do! Try selecting some of this text to see.
+        </p>
+      </main>
+
+      <hr />
+
+      <footer>
+        Made by
+        <a href="https://jamesbvaughan.com">James Vaughan</a>
+      </footer>
+    </div>
+  </body>
+</html>
