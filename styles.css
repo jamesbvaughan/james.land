@@ -1,7 +1,4 @@
 body {
-  /* Only named colors! */
-  background-color: dimgray;
-  color: lavenderblush;
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
   display: flex;
@@ -19,11 +16,38 @@ a:hover {
 
 a,
 a:active {
-  color: aliceblue;
   text-underline-offset: 3px;
 }
 
-::selection {
-  background-color: lavenderblush;
-  color: dimgray;
+time {
+  font-style: italic;
+}
+
+/*
+* COLORS!
+*
+* These are somewhat inspired by catppuccin, mostly chosen so that the
+* transition between my editor and the page is easy on my eyes.
+*/
+
+body {
+  background-color: #eff1f5;
+  color: #4c4f69;
+}
+
+a,
+a:active {
+  color: #df8e1d;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1e1e2e;
+    color: #cdd6f4;
+  }
+
+  a,
+  a:active {
+    color: #f9e2af;
+  }
 }
