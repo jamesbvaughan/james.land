@@ -1,130 +1,144 @@
-const explodeStates = new Map();
-const explodeContainers = document.querySelectorAll(".explode");
-explodeContainers.forEach((explodeContainer) => {
-  const text = explodeContainer.textContent.trim();
-
-  explodeContainer.replaceChildren(
-    ...text.split("").map((character) => {
-      const span = document.createElement("span");
-      span.className = "explodable";
-      span.textContent = character;
-      return span;
-    }),
-  );
-  const ghostElement = document.createElement("span");
-  ghostElement.textContent = text;
-  ghostElement.style.opacity = 0;
-  ghostElement.style.pointerEvents = "none";
-  explodeContainer.appendChild(ghostElement);
-
-  const containerRect = explodeContainer.getBoundingClientRect();
-  explodeContainer.querySelectorAll(".explodable").forEach((explodable) => {
-    const rect = explodable.getBoundingClientRect();
-    explodeStates.set(explodable, {
-      exploding: false,
-      x: 0,
-      y: 0,
-      initialX: 0,
-      initialY: 0,
-      top: rect.top - containerRect.top,
-      left: rect.left - containerRect.left,
-      angle: 0,
-      velocityX: Math.random() - 0.5,
-      velocityY: Math.random() - 0.5,
-      rotationSpeed: Math.random() - 0.5,
-    });
-  });
-});
-
-const explodables = document.querySelectorAll(".explodable");
-
 const maxDepartVelocity = 0.5;
 const maxReturnVelocity = 5;
+const explosionDelayMs = 50;
 
-explodables.forEach((element) => {
-  const explodeState = explodeStates.get(element);
-  element.style.position = "absolute";
-  element.style.top = `${explodeState.top}px`;
-  element.style.left = `${explodeState.left}px`;
-});
+const explodeStates = new Map();
 
-const selectionStates = new Map();
+function initialize() {
+  explodeStates.clear();
 
-function animate() {
-  const selection = window.getSelection();
-  const selectionString = selection.toString();
+  document.querySelectorAll(".explode").forEach((explodeContainer) => {
+    const oldGhost = explodeContainer.querySelector(".ghost");
+    if (oldGhost) {
+      explodeContainer.removeChild(oldGhost);
+    }
 
-  explodables.forEach((element) => {
-    selectionStates.set(
-      element,
-      selection.containsNode(
-        element,
-        element !== selection.focusNode && element !== selection.anchorNode,
-      ),
+    const text = explodeContainer.textContent.trim();
+
+    // Create an invisible element in order to retain the document layout
+    const ghostElement = document.createElement("span");
+    ghostElement.className = "ghost";
+    ghostElement.textContent = text;
+    ghostElement.style.opacity = 0;
+    ghostElement.style.pointerEvents = "none";
+
+    explodeContainer.replaceChildren(
+      // Replace each character with a <span>
+      ...text.split("").map((character) => {
+        const span = document.createElement("span");
+        span.className = "explodable";
+        span.textContent = character;
+        return span;
+      }),
+      document.createTextNode(" "),
+      ghostElement,
     );
+
+    // Set up the state tracking map
+    const containerRect = explodeContainer.getBoundingClientRect();
+    explodeContainer.querySelectorAll(".explodable").forEach((explodable) => {
+      const rect = explodable.getBoundingClientRect();
+      explodeStates.set(explodable, {
+        element: explodable,
+        exploding: false,
+        selected: false,
+        x: 0,
+        y: 0,
+        top: rect.top - containerRect.top,
+        left: rect.left - containerRect.left,
+        angle: 0,
+        velocityX: Math.random() - 0.5,
+        velocityY: Math.random() - 0.5,
+        rotationSpeed: Math.random() - 0.5,
+      });
+    });
   });
 
-  explodables.forEach((element) => {
-    const explodeState = explodeStates.get(element);
+  // Switch each character to use absolute positioning
+  explodeStates.forEach((explodeState) => {
+    explodeState.element.style.position = "absolute";
+    explodeState.element.style.top = `${explodeState.top}px`;
+    explodeState.element.style.left = `${explodeState.left}px`;
+  });
+}
 
-    let x = explodeState.x;
-    let y = explodeState.y;
+window.addEventListener("resize", initialize);
 
-    if (selectionString.length > 0 && selectionStates.get(element)) {
-      if (explodeState.exploding) {
-        x += maxDepartVelocity * explodeState.velocityX;
-        y += maxDepartVelocity * explodeState.velocityY;
-        explodeState.angle += maxDepartVelocity * explodeState.rotationSpeed;
+initialize();
+
+// Keep the selection state up to date
+let selectionString = "";
+document.addEventListener("selectionchange", () => {
+  const selection = window.getSelection();
+  selectionString = selection.toString();
+
+  explodeStates.forEach((explodeState) => {
+    explodeState.selected = selection.containsNode(
+      explodeState.element,
+      explodeState.element !== selection.focusNode &&
+        explodeState.element !== selection.anchorNode,
+    );
+  });
+});
+
+function animate() {
+  explodeStates.forEach((explodeState) => {
+    const {
+      selected,
+      exploding,
+      element,
+      x,
+      y,
+      angle,
+      velocityX,
+      velocityY,
+      rotationSpeed,
+    } = explodeState;
+
+    if (selectionString.length > 0 && selected) {
+      if (exploding) {
+        explodeState.x += maxDepartVelocity * velocityX;
+        explodeState.y += maxDepartVelocity * velocityY;
+        explodeState.angle += maxDepartVelocity * rotationSpeed;
       } else {
         setTimeout(() => {
           explodeState.exploding = true;
-        }, 10);
+        }, explosionDelayMs);
       }
     } else {
-      const dx = x - explodeState.initialX;
       if (
-        (explodeState.velocityX > 0 && dx > explodeState.velocityX) ||
-        (explodeState.velocityX < 0 && dx < explodeState.velocityX)
+        (velocityX > 0 && x > velocityX) ||
+        (velocityX < 0 && x < velocityX)
       ) {
-        x -= maxReturnVelocity * explodeState.velocityX;
+        explodeState.x -= maxReturnVelocity * velocityX;
       } else {
-        x = explodeState.initialX;
-      }
-
-      const dy = y - explodeState.initialY;
-      if (
-        (explodeState.velocityY > 0 && dy > explodeState.velocityY) ||
-        (explodeState.velocityY < 0 && dy < explodeState.velocityY)
-      ) {
-        y -= maxReturnVelocity * explodeState.velocityY;
-      } else {
-        y = explodeState.initialY;
+        explodeState.x = 0;
       }
 
       if (
-        (explodeState.rotationSpeed > 0 && explodeState.angle > 0) ||
-        (explodeState.rotationSpeed < 0 && explodeState.angle < 0)
+        (velocityY > 0 && y > velocityY) ||
+        (velocityY < 0 && y < velocityY)
       ) {
-        explodeState.angle -= maxReturnVelocity * explodeState.rotationSpeed;
+        explodeState.y -= maxReturnVelocity * velocityY;
+      } else {
+        explodeState.y = 0;
+      }
+
+      if (
+        (rotationSpeed > 0 && angle > 0) ||
+        (rotationSpeed < 0 && angle < 0)
+      ) {
+        explodeState.angle -= maxReturnVelocity * rotationSpeed;
       } else {
         explodeState.angle = 0;
       }
     }
 
-    if (
-      explodeState.exploding &&
-      x === explodeState.initialX &&
-      y === explodeState.initialY
-    ) {
+    if (exploding && explodeState.x === 0 && explodeState.y === 0) {
       explodeState.exploding = false;
     }
 
-    explodeState.x = x;
-    explodeState.y = y;
-
-    element.style.setProperty("--x", `${x}px`);
-    element.style.setProperty("--y", `${y}px`);
-    element.style.setProperty("--angle", `${explodeState.angle}deg`);
+    element.style.transform = `translate(${explodeState.x}px, ${explodeState.y}px) rotate(${explodeState.angle}deg)`;
   });
 
   requestAnimationFrame(animate);
