@@ -62,6 +62,8 @@ function initialize() {
   });
 }
 
+// The absolute positioning gets messed up if a resize changes the layout, so I
+// re-initialize everything on resize
 window.addEventListener("resize", initialize);
 
 initialize();
@@ -81,67 +83,57 @@ document.addEventListener("selectionchange", () => {
   });
 });
 
-function animate() {
-  explodeStates.forEach((explodeState) => {
-    const {
-      selected,
-      exploding,
-      element,
-      x,
-      y,
-      angle,
-      velocityX,
-      velocityY,
-      rotationSpeed,
-    } = explodeState;
+function animateExplodeState(explodeState) {
+  const {
+    selected,
+    exploding,
+    element,
+    x,
+    y,
+    angle,
+    velocityX,
+    velocityY,
+    rotationSpeed,
+  } = explodeState;
 
-    if (selectionString.length > 0 && selected) {
-      if (exploding) {
-        explodeState.x += maxDepartVelocity * velocityX;
-        explodeState.y += maxDepartVelocity * velocityY;
-        explodeState.angle += maxDepartVelocity * rotationSpeed;
-      } else {
-        setTimeout(() => {
-          explodeState.exploding = true;
-        }, explosionDelayMs);
-      }
+  if (selectionString.length > 0 && selected) {
+    if (exploding) {
+      explodeState.x += maxDepartVelocity * velocityX;
+      explodeState.y += maxDepartVelocity * velocityY;
+      explodeState.angle += maxDepartVelocity * rotationSpeed;
     } else {
-      if (
-        (velocityX > 0 && x > velocityX) ||
-        (velocityX < 0 && x < velocityX)
-      ) {
-        explodeState.x -= maxReturnVelocity * velocityX;
-      } else {
-        explodeState.x = 0;
-      }
-
-      if (
-        (velocityY > 0 && y > velocityY) ||
-        (velocityY < 0 && y < velocityY)
-      ) {
-        explodeState.y -= maxReturnVelocity * velocityY;
-      } else {
-        explodeState.y = 0;
-      }
-
-      if (
-        (rotationSpeed > 0 && angle > 0) ||
-        (rotationSpeed < 0 && angle < 0)
-      ) {
-        explodeState.angle -= maxReturnVelocity * rotationSpeed;
-      } else {
-        explodeState.angle = 0;
-      }
+      setTimeout(() => {
+        explodeState.exploding = true;
+      }, explosionDelayMs);
+    }
+  } else {
+    if ((velocityX > 0 && x > velocityX) || (velocityX < 0 && x < velocityX)) {
+      explodeState.x -= maxReturnVelocity * velocityX;
+    } else {
+      explodeState.x = 0;
     }
 
-    if (exploding && explodeState.x === 0 && explodeState.y === 0) {
-      explodeState.exploding = false;
+    if ((velocityY > 0 && y > velocityY) || (velocityY < 0 && y < velocityY)) {
+      explodeState.y -= maxReturnVelocity * velocityY;
+    } else {
+      explodeState.y = 0;
     }
 
-    element.style.transform = `translate(${explodeState.x}px, ${explodeState.y}px) rotate(${explodeState.angle}deg)`;
-  });
+    if ((rotationSpeed > 0 && angle > 0) || (rotationSpeed < 0 && angle < 0)) {
+      explodeState.angle -= maxReturnVelocity * rotationSpeed;
+    } else {
+      explodeState.angle = 0;
+    }
+  }
 
-  requestAnimationFrame(animate);
+  if (exploding && explodeState.x === 0 && explodeState.y === 0) {
+    explodeState.exploding = false;
+  }
+
+  element.style.transform = `translate(${explodeState.x}px, ${explodeState.y}px) rotate(${explodeState.angle}deg)`;
 }
 
-animate();
+(function animate() {
+  explodeStates.forEach(animateExplodeState);
+  requestAnimationFrame(animate);
+})();
