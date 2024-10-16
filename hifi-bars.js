@@ -11,7 +11,12 @@ const hifiBars = [
     url: "https://maps.app.goo.gl/3H8hHffbh8hmdoAN6",
     lat: 37.80641605541192,
     lng: -122.27070496043847,
-    size: 10,
+  },
+  {
+    name: "Yokai",
+    url: "https://maps.app.goo.gl/1Had8EYaxNWxC7R19",
+    lat: 37.78934947651318,
+    lng: -122.39843050319782,
   },
 
   // Europe
