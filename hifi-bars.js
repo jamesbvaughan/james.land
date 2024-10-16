@@ -30,6 +30,25 @@ const hifiBars = [
     lat: 47.377943469588175,
     lng: 8.527304143206587,
   },
+  /// Spain
+  {
+    name: "Lonely",
+    url: "https://maps.app.goo.gl/7faq9o3Rsyy7FooKA",
+    lat: 41.39884988560985,
+    lng: 2.155175333005087,
+  },
+  {
+    name: "Oblicuo",
+    url: "https://maps.app.goo.gl/R3xbyBb9vNjVquaD8",
+    lat: 41.401476723824,
+    lng: 2.1549146970909336,
+  },
+  {
+    name: "Curtis Audiophile Cafe",
+    url: "https://maps.app.goo.gl/exaHmrbxuoP3hWss9",
+    lat: 41.39210493208592,
+    lng: 2.1578633268503906,
+  },
 ];
 
 function hifiBarToElement(hifiBar) {
