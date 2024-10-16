@@ -40,6 +40,10 @@ function hifiBarToElement(hifiBar) {
   element.className = "hifi-bar-marker";
   element.innerHTML = hifiBar.name;
 
+  element.addEventListener("touchmove", (event) => {
+    event.preventDefault();
+  });
+
   return element;
 }
 
@@ -49,7 +53,7 @@ function App() {
   const [height, setHeight] = React.useState(window.innerHeight);
 
   React.useEffect(() => {
-    globeRef.current.controls().enableDamping = false;
+    // globeRef.current.controls().enableDamping = false;
     globeRef.current.pointOfView({ lat: 37.8, lng: -122, altitude: 1 });
 
     window.addEventListener("resize", () => {
