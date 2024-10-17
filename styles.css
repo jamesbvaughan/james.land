@@ -5,6 +5,10 @@ body {
   justify-content: center;
 }
 
+footer {
+  margin-bottom: 12px;
+}
+
 .container {
   width: 720px;
   max-width: 90vw;
