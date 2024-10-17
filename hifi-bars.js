@@ -1,3 +1,5 @@
+// This import results in multiple versions of three.js being downloaded.
+// See https://github.com/esm-dev/esm.sh/discussions/845 for context.
 import Globe from "https://esm.sh/globe.gl@2.33.0";
 import hifiBars from "./hifi-bar-list.js";
 
