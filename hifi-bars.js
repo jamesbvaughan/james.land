@@ -1,5 +1,5 @@
-import Globe from "https://esm.sh/globe.gl@^2";
-import hifiBars from "/hifi-bar-list.js";
+import Globe from "https://esm.sh/globe.gl@2.33.0";
+import hifiBars from "./hifi-bar-list.js";
 
 const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
