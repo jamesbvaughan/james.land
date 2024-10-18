@@ -16,7 +16,19 @@
         justify-content: space-between;
       "
     >
-      <div>
+      <div
+        id="drawingCanvas"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          overflow: hidden;
+        "
+      ></div>
+
+      <div style="z-index: 1">
         <header>
           <h1>
             <a href="/">james.land</a>
@@ -33,23 +45,10 @@
         </main>
       </div>
 
-      <footer>
+      <footer style="z-index: 1">
         Made by
         <a href="https://jamesbvaughan.com">James Vaughan</a>
       </footer>
-
-      <div
-        id="drawingCanvas"
-        style="
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          zindex: -1;
-          overflow: hidden;
-        "
-      ></div>
     </div>
 
     <script type="module">
