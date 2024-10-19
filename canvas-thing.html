@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>canvas thing | james.land</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="what is this? some kind of canvas thing?"
+    />
+  </head>
+
+  <body style="height: 100vh">
+    <div
+      class="container"
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      "
+    >
+      <div>
+        <header>
+          <h1>
+            <a href="/">james.land</a>
+          </h1>
+        </header>
+
+        <main>
+          <h2>canvas ting</h2>
+          <time class="explode">2024-10-18</time>
+        </main>
+      </div>
+
+      <footer>
+        Made by
+        <a href="https://jamesbvaughan.com">James Vaughan</a>
+      </footer>
+
+      <canvas
+        id="drawingCanvas"
+        style="position: absolute; top: 0; left: 0; right: 0; bottom: 0"
+      />
+    </div>
+
+    <script type="module">
+      const context = drawingCanvas.getContext("2d");
+
+      let startX = 0;
+      let startY = 0;
+      let endX = 0;
+      let endY = 0;
+
+      drawingCanvas.width = window.innerWidth;
+      drawingCanvas.height = window.innerHeight;
+
+      const isDarkMode = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+      context.strokeStyle = isDarkMode ? "#cdd6f4" : "#4c4f69";
+
+      drawingCanvas.addEventListener("pointerdown", (event) => {
+        endX = event.clientX;
+        endY = event.clientY;
+        if (startX) {
+          drawLine();
+        }
+        startX = endX;
+        startY = endY;
+      });
+      console.log(context);
+
+      function drawLine() {
+        context.beginPath();
+        context.lineWidth = 4;
+        context.moveTo(startX, startY);
+        context.lineTo(endX, endY);
+        context.stroke();
+        context.closePath();
+      }
+    </script>
+  </body>
+</html>
