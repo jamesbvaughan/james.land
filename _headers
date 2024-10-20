@@ -1,2 +1,5 @@
+# Early hints config
+# This allows Cloudflare to send a 103 response to browsers so that they can
+# start downloading assets before the main page has finished downloading.
 /*
   Link: </styles.css>; rel=preload; as=style
