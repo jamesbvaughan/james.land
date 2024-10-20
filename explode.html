@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>exploding selection | james.land</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer type="text/javascript" src="exploding-selection.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Can selected text explode?" />
+    <meta property="og:image" content="/og.png" />
+
+    <style>
+      .explode {
+        position: relative;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="/">james.land</a>
+        </h1>
+      </header>
+
+      <main>
+        <h2 class="explode">exploding selection</h2>
+        <time class="explode">2024-10-13</time>
+
+        <p class="explode">
+          For this experiment, I wanted to see if browsers retain your text
+          selection if the selected text breaks apart spatially.
+        </p>
+
+        <p class="explode">
+          It turns out that they do! Try selecting some of this text to see.
+        </p>
+
+        <p class="explode">
+          This mostly works how I'd hoped it would, but there are some issues
+          that I haven't resolved:
+        </p>
+
+        <ul>
+          <li class="explode">
+            Characters right before or right after the selection are sometimes
+            included in the explosion. I think this has to do with the concept
+            of "anchor nodes" and "target nodes" in browser selection.
+          </li>
+          <li class="explode">
+            The performance is worse than I'd like, especially for large
+            selections. It got a lot better when I moved the
+            `selection.containsNode` call outside of the animation loop, but all
+            of the CSS updates are still surprisingly slow.
+          </li>
+        </ul>
+      </main>
+
+      <hr />
+
+      <footer>
+        Made by
+        <a href="https://jamesbvaughan.com">James Vaughan</a>
+      </footer>
+    </div>
+  </body>
+</html>

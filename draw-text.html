@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>draw text | james.land</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Draw with text!" />
+    <meta property="og:image" content="/og.png" />
+  </head>
+
+  <body style="height: 100vh">
+    <div
+      class="container"
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      "
+    >
+      <div
+        id="drawingCanvas"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          overflow: hidden;
+        "
+      ></div>
+
+      <div style="z-index: 1">
+        <header>
+          <h1>
+            <a href="/">james.land</a>
+          </h1>
+        </header>
+
+        <main>
+          <h2>draw text</h2>
+          <time class="explode">2024-10-18</time>
+
+          <p>Click and drag to draw</p>
+
+          <p id="soFar"></p>
+        </main>
+      </div>
+
+      <footer style="z-index: 1">
+        Made by
+        <a href="https://jamesbvaughan.com">James Vaughan</a>
+      </footer>
+    </div>
+
+    <script type="module">
+      // config
+      const maxSpeed = 0.05;
+
+      // state
+      const letters = [];
+      let drawing = false;
+      let clientX = 0;
+      let clientY = 0;
+
+      function getRandomLetter() {
+        const a2z = "abcdefghijklmnopqrstuvwxyz";
+        return a2z[Math.floor(Math.random() * a2z.length)];
+      }
+
+      function onMove(x, y) {
+        if (!drawing) return;
+        clientX = x;
+        clientY = y;
+        addLetter();
+      }
+
+      function addLetter() {
+        const element = document.createElement("div");
+        element.innerHTML = getRandomLetter();
+        element.style.position = "absolute";
+        element.style.top = `${clientY}px`;
+        element.style.left = `${clientX}px`;
+        element.style.userSelect = "none";
+        element.style.zIndex = "-1";
+        drawingCanvas.appendChild(element);
+        letters.push({
+          element,
+          y: clientY,
+          x: clientX,
+          angle: 0,
+          velocityX: maxSpeed * (Math.random() - 0.5),
+          velocityY: maxSpeed * (Math.random() - 0.5),
+          rotationSpeed: maxSpeed * (Math.random() - 0.5),
+        });
+        soFar.innerHTML = `${letters.length} letters drawn`;
+      }
+
+      function animate() {
+        for (const letter of letters) {
+          letter.y += letter.velocityY;
+          letter.x += letter.velocityX;
+          letter.angle += letter.rotationSpeed;
+          letter.element.style.top = `${letter.y}px`;
+          letter.element.style.left = `${letter.x}px`;
+          letter.element.style.transform = `rotate(${letter.angle}deg)`;
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      drawingCanvas.addEventListener("pointerdown", (event) => {
+        drawing = true;
+        clientX = event.clientX;
+        clientY = event.clientY;
+        addLetter();
+        event.target.setPointerCapture(event.pointerId);
+      });
+      drawingCanvas.addEventListener("pointermove", (event) => {
+        onMove(event.clientX, event.clientY);
+      });
+      drawingCanvas.addEventListener("touchmove", (event) => {
+        for (const touch of event.touches) {
+          onMove(touch.clientX, touch.clientY);
+        }
+      });
+      drawingCanvas.addEventListener("pointerup", () => {
+        drawing = false;
+      });
+      drawingCanvas.addEventListener("touchstart", (event) => {
+        // Disable touch navigation
+        event.preventDefault();
+      });
+
+      animate();
+    </script>
+  </body>
+</html>
