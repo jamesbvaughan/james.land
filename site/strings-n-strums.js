@@ -174,27 +174,6 @@ clearButton.addEventListener("click", () => {
   lines.length = 0;
 });
 
-function updateSoundButton() {
-  if (audioContext.state === "running") {
-    soundIcon.style.display = "block";
-    muteIcon.style.display = "none";
-  } else {
-    soundIcon.style.display = "none";
-    muteIcon.style.display = "block";
-  }
-}
-audioContext.addEventListener("statechange", updateSoundButton);
-
-audioContext.resume();
-
-soundButton.addEventListener("click", () => {
-  if (audioContext.state === "running") {
-    audioContext.suspend();
-  } else if (audioContext.state === "suspended") {
-    audioContext.resume();
-  }
-});
-
 document.addEventListener("touchstart", startAudioContext);
 document.addEventListener("pointerdown", startAudioContext);
 document.addEventListener("click", startAudioContext);
