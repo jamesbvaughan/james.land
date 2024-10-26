@@ -195,6 +195,11 @@ soundButton.addEventListener("click", () => {
   }
 });
 
+document.addEventListener("touchstart", startAudioContext);
+document.addEventListener("pointerdown", startAudioContext);
+document.addEventListener("click", startAudioContext);
+document.addEventListener("visibilitychange", startAudioContext);
+
 // =============================================================================
 // Rendering
 
@@ -224,6 +229,15 @@ render();
 
 // =============================================================================
 // Sounds
+
+function startAudioContext() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioContext.state === "suspended" && !document.hidden) {
+    audioContext.resume();
+  }
+}
 
 function makeDistortionCurve(amount) {
   const samples = 44100;
