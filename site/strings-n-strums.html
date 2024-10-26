@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>strings n strums | james.land</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="stringin n strummin" />
+    <meta property="og:image" content="/og.png" />
+    <script defer src="strings-n-strums.js"></script>
+
+    <style>
+      button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        width: 40px;
+        line-height: 0;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--fg);
+        stroke: var(--bg);
+        opacity: 0.2;
+        cursor: pointer;
+      }
+      button:hover {
+        opacity: 0.3;
+      }
+      button:active {
+        opacity: 0.25;
+      }
+      #clearButton {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+      #soundButton {
+        position: absolute;
+        top: 56px;
+        right: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas
+      style="position: absolute; top: 0; left: 0; right: 0; bottom: 0"
+    ></canvas>
+
+    <div
+      style="
+        margin: 40vh 20px;
+        pointer-events: none;
+        font-size: 40px;
+        color: var(--fg);
+        opacity: 0.2;
+        text-align: center;
+      "
+    >
+      <div id="clickAround">(click around)</div>
+      <div id="nowStrum" style="display: none">(now strum w/ sound on)</div>
+    </div>
+
+    <button id="clearButton" title="Clear lines">
+      <div>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 10 10"
+          xmlns="http://www.w3.org/2000/svg"
+          stroke-width="2"
+        >
+          <line x1="0" y1="0" x2="10" y2="10" />
+          <line x1="10" y1="0" x2="0" y2="10" />
+        </svg>
+      </div>
+    </button>
+  </body>
+</html>

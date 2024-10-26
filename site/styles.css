@@ -34,24 +34,27 @@ time {
 * transition between my editor and the page is easy on my eyes.
 */
 
+:root {
+  --bg: #eff1f5;
+  --fg: #4c4f69;
+  --link: #df8e1d;
+}
+
+/* Dark theme colors using prefers-color-scheme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e1e2e;
+    --fg: #cdd6f4;
+    --link: #f9e2af;
+  }
+}
+
 body {
-  background-color: #eff1f5;
-  color: #4c4f69;
+  background-color: var(--bg);
+  color: var(--fg);
 }
 
 a,
 a:active {
-  color: #df8e1d;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #1e1e2e;
-    color: #cdd6f4;
-  }
-
-  a,
-  a:active {
-    color: #f9e2af;
-  }
+  color: var(--link);
 }
