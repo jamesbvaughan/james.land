@@ -36,6 +36,8 @@ function handleColorSchemeChange() {
   );
 }
 
+const audioContext = new AudioContext();
+
 // =============================================================================
 // State
 
@@ -172,17 +174,26 @@ clearButton.addEventListener("click", () => {
   lines.length = 0;
 });
 
-// soundButton.addEventListener("click", () => {
-//   if (audioContext.state === "running") {
-//     audioContext.suspend().then(() => {
-//       soundButton.textContent = "off";
-//     });
-//   } else if (audioContext.state === "suspended") {
-//     audioContext.resume().then(() => {
-//       soundButton.textContent = "on";
-//     });
-//   }
-// });
+function updateSoundButton() {
+  if (audioContext.state === "running") {
+    soundIcon.style.display = "block";
+    muteIcon.style.display = "none";
+  } else {
+    soundIcon.style.display = "none";
+    muteIcon.style.display = "block";
+  }
+}
+audioContext.addEventListener("statechange", updateSoundButton);
+
+audioContext.resume();
+
+soundButton.addEventListener("click", () => {
+  if (audioContext.state === "running") {
+    audioContext.suspend();
+  } else if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+});
 
 // =============================================================================
 // Rendering
@@ -214,8 +225,6 @@ render();
 // =============================================================================
 // Sounds
 
-const audioContext = new AudioContext();
-
 function makeDistortionCurve(amount) {
   const samples = 44100;
   const curve = new Float32Array(samples);
@@ -231,6 +240,10 @@ function makeDistortionCurve(amount) {
 const distortionCurve = makeDistortionCurve(50);
 
 function playTone(frequency, duration) {
+  if (audioContext.state !== "running") {
+    return;
+  }
+
   const osc1 = audioContext.createOscillator();
   const osc2 = audioContext.createOscillator();
   const gainNode = audioContext.createGain();
