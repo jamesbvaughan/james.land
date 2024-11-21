@@ -4,15 +4,24 @@ const ctx = canvas.getContext("2d");
 const numSides = 9;
 const lineThickness = 2;
 
+const dpr = window.devicePixelRatio || 1;
+
 function drawNonagon() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const cssWidth = window.innerWidth;
+  const cssHeight = window.innerHeight;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.width = cssWidth * dpr;
+  canvas.height = cssHeight * dpr;
 
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-  const radius = Math.min(canvas.width, canvas.height) / 3;
+  canvas.style.width = `${cssWidth}px`;
+  canvas.style.height = `${cssHeight}px`;
+
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+
+  const centerX = canvas.width / dpr / 2;
+  const centerY = canvas.height / dpr / 2;
+  const radius = Math.min(canvas.width, canvas.height) / dpr / 3;
 
   const vertices = [];
   for (let i = 0; i < numSides; i++) {
@@ -25,7 +34,7 @@ function drawNonagon() {
   ctx.strokeStyle = "red";
   ctx.lineWidth = lineThickness;
   ctx.shadowColor = "red";
-  ctx.shadowBlur = 30;
+  ctx.shadowBlur = 30 / dpr;
 
   for (let i = 0; i < numSides; i++) {
     for (let j = i + 1; j < numSides; j++) {
